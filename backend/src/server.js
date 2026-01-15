@@ -6,10 +6,6 @@ import { connectDB } from "./lib/db.js"
 const app = express()
 const __dirname = path.resolve(); 
 
-app.get("/" , (req , res) => {
-    res.status(200).json({msg : "Success from API"})
-})
-
 app.get("/health", (req, res) => {
   res.status(200).json({ msg: "api is up and running" });
 });
