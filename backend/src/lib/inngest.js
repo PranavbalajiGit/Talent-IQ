@@ -23,5 +23,16 @@ const syncUser = inngest.createFunction(
     }
 )
 
+const deleteUserFromDB = inngest.createFunction(
+    {id : "delete-user-from-db"},
+    {event : "clerk.user/deleted"},
+    async ({event}) => {
+        await connectDB()
+
+        const {id} = event.data;
+        await User.deleteOne({clerkId:id});
+    }
+)
+
 //Check is the functions a Keyword during Notes
-export const functions = [syncUser]
+export const functions = [syncUser , deleteUserFromDB]
