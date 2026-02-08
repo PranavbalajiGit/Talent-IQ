@@ -123,4 +123,34 @@ export async function joinSession(req, res) {
     }
 }
 
-export async function endSession(req, res) {}
+export async function endSession(req, res) {
+    try {
+        const {id} = req.params;
+        const userId = req.user.Id;
+
+        const session = await Session.findById(id);
+        if(!session) return res.status(404).json({msg : "Session not found"});
+
+        if(session.host.toString() !== userId.toString()) {
+            return res.status(403).json({msg : "Only host can end the session"});
+        }
+
+        if(session.status === "completed") {
+            return res.status(400).json({msg : "Session is already completed"});
+        }
+
+        session.status = "completed";
+        await session.save();
+
+        const call = streamClient.video.call("default", session.callId);
+        await call.end();
+
+        const channel = chatClient.channel("messaging", session.callId);
+        await channel.delete();
+
+        res.status(200).json({session,msg : "Session ended successfully"});
+    } catch (error) {
+        console.log("Error in endSession controller", error.message);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+}
