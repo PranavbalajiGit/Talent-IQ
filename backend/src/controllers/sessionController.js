@@ -80,8 +80,47 @@ export async function getMyRecentSessions(req, res) {
     }
 }
 
-export async function getSessionById(req, res) {}
+export async function getSessionById(req, res) {
+    try {
+        const {id} = req.params;
 
-export async function joinSession(req, res) {}
+        const session = await Session.findById(id)
+        .populate("host" , "name email profileImage clerkId")
+        .populate("participant" , "name email profileImage clerkId");
+
+        if(!session) return res.status(404).json({msg : "Session not found"});
+
+        res.status(200).json({session});
+    } catch (error) {
+        console.log("Error in getSessionById controller", error.message);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+}
+
+export async function joinSession(req, res) {
+    try {
+        const {id} = req.params;
+        const userId = req.user._id;
+        const clerkId = req.user.clerkId;
+
+        const session = await Session.findById(id);
+
+        if(!session) return res.status(404).json({msg : "Session not found"});
+
+        if(session.participant) return res.status(400).json({msg : "Session already has a participant"});
+
+        session.participant = userId;
+        await session.save();
+
+        const channel = chatClient.channel("messaging", session.callId);
+        await channel.addMembers([clerkId]);
+
+        res.status(200).json({session});
+
+    } catch (error) {
+        console.log("Error in joinSession controller", error.message);
+        res.status(500).json({ msg: "Internal Server Error" });
+    }
+}
 
 export async function endSession(req, res) {}
