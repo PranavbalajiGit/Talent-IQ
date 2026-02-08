@@ -1,4 +1,4 @@
-import { streamClient } from "../lib/stream.js";
+import { chatClient, streamClient } from "../lib/stream.js";
 import Session from "../models/Session.js";
 
 export async function createSession(req, res) {
@@ -18,7 +18,7 @@ export async function createSession(req, res) {
     const session = await Session.create({
       problem,
       difficulty,
-      hostUser: userId,
+      host: userId,
       callId,
     });
 
@@ -134,7 +134,7 @@ export async function joinSession(req, res) {
 export async function endSession(req, res) {
     try {
         const {id} = req.params;
-        const userId = req.user.Id;
+        const userId = req.user._id;
 
         const session = await Session.findById(id);
         if(!session) return res.status(404).json({msg : "Session not found"});
