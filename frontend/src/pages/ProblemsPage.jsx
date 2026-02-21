@@ -1,8 +1,10 @@
-import React from 'react'
+import Navbar from "../components/Navbar.jsx"
 
 const ProblemsPage = () => {
   return (
-    <div>ProblemsPage</div>
+    <div className="min-h-screen bg-base-200">
+        <Navbar />
+    </div>
   )
 }
 
