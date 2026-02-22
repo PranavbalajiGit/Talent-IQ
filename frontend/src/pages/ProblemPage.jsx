@@ -32,14 +32,14 @@ function ProblemPage() {
 
     const handleLanguageChange = (e) => {};
 
-    const handleProblemChange = (e) => {};
+    const handleProblemChange = (newProblemId) => navigate(`/problem/${newProblemId}`);
 
     const triggerConfetti = () => {};
 
     const checkIfTestsPassed = () => {};
 
   return (
-    <div className="h-screen w-screen bg-base-100 flex flex-col">
+    <div className="h-screen bg-base-100 flex flex-col">
         <Navbar />
 
         <div className="flex-1">
@@ -47,7 +47,12 @@ function ProblemPage() {
 
                 {/* LEFT PANEL for PROBLEM DESCRIPTION */}
                 <Panel defaultSize={40} minSize={30}>
-                    <ProblemDescription />
+                    <ProblemDescription 
+                        problem={currentProblem}
+                        currentProblemId={currentProblemId}
+                        onProblemChange={handleProblemChange}
+                        allProblems={Object.values(PROBLEMS)}
+                    />
                 </Panel>
 
                 {/* RESIZEABLE PANEL IN BETWEEN FOR PROBLEM DESCRIPTION AND CODE EDITOR */}
@@ -55,16 +60,20 @@ function ProblemPage() {
 
                 {/* RIGHT PANEL for CODE EDITOR and OUTPUT */}
                 <Panel defaultSize={60} minSize={30}>
-                    <PanelGroup>
+                    <PanelGroup direction="vertical">
+
+                        {/* TOP PANEL FOR Code Editor */}
                         <Panel defaultSize={70} minSize={30}>
                             <CodeEditorPanel />
                         </Panel>
 
-                        <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
+                        <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
 
+                        {/* BOTTOM PANEL FOR Output */}
                         <Panel defaultSize={30} minSize={30}>
                             <OutputPanel />
                         </Panel>
+
                     </PanelGroup>
                 </Panel>
 
