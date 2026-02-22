@@ -10,77 +10,82 @@ import CodeEditorPanel from "../components/CodeEditorPanel.jsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 function ProblemPage() {
+  const { id } = useParams();
+  const navigate = useNavigate();
 
-    const { id } = useParams();
-    const navigate = useNavigate();
+  const [currentProblemId, setCurrentProblemId] = useState("two-sum");
+  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
+  const [code, setCode] = useState(
+    PROBLEMS[currentProblemId].starterCode.javascript,
+  );
+  const [output, setOutput] = useState(null);
+  const [isRunning, setIsRunning] = useState(false);
 
-    const [currentProblemId, setCurrentProblemId] = useState("two-sum");
-    const [selectedLanguage, setSelectedLanguage] = useState("javascript");
-    const [code, setCode] = useState(PROBLEMS[currentProblemId].starterCode.javascript);
-    const [output, setOutput] = useState(null);
-    const [isRunning, setIsRunning] = useState(false);
+  const currentProblem = PROBLEMS[currentProblemId];
 
-    const currentProblem = PROBLEMS[currentProblemId];
+  useEffect(() => {
+    if (id && PROBLEMS[id]) {
+      setCurrentProblemId(id);
+      setCode(PROBLEMS[id].starterCode[selectedLanguage]);
+      setOutput(null);
+    }
+  }, [id, selectedLanguage]);
 
-    useEffect(() => {
-        if (id && PROBLEMS[id]) {
-            setCurrentProblemId(id);
-            setCode(PROBLEMS[id].starterCode[selectedLanguage]);
-            setOutput(null);
-        }
-    }, [id, selectedLanguage]);
+  const handleLanguageChange = (e) => {};
 
-    const handleLanguageChange = (e) => {};
+  const handleProblemChange = (newProblemId) =>
+    navigate(`/problem/${newProblemId}`);
 
-    const handleProblemChange = (newProblemId) => navigate(`/problem/${newProblemId}`);
+  const triggerConfetti = () => {};
 
-    const triggerConfetti = () => {};
-
-    const checkIfTestsPassed = () => {};
+  const checkIfTestsPassed = () => {};
 
   return (
     <div className="h-screen bg-base-100 flex flex-col">
-        <Navbar />
+      <Navbar />
 
-        <div className="flex-1">
-            <PanelGroup direction="horizontal">
+      <div className="flex-1">
+        <PanelGroup direction="horizontal">
+          {/* LEFT PANEL for PROBLEM DESCRIPTION */}
+          <Panel defaultSize={40} minSize={30}>
+            <ProblemDescription
+              problem={currentProblem}
+              currentProblemId={currentProblemId}
+              onProblemChange={handleProblemChange}
+              allProblems={Object.values(PROBLEMS)}
+            />
+          </Panel>
 
-                {/* LEFT PANEL for PROBLEM DESCRIPTION */}
-                <Panel defaultSize={40} minSize={30}>
-                    <ProblemDescription 
-                        problem={currentProblem}
-                        currentProblemId={currentProblemId}
-                        onProblemChange={handleProblemChange}
-                        allProblems={Object.values(PROBLEMS)}
-                    />
-                </Panel>
+          {/* RESIZEABLE PANEL IN BETWEEN FOR PROBLEM DESCRIPTION AND CODE EDITOR */}
+          <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
 
-                {/* RESIZEABLE PANEL IN BETWEEN FOR PROBLEM DESCRIPTION AND CODE EDITOR */}
-                <PanelResizeHandle className="w-2 bg-base-300 hover:bg-primary transition-colors cursor-col-resize" />
+          {/* RIGHT PANEL for CODE EDITOR and OUTPUT */}
+          <Panel defaultSize={60} minSize={30}>
+            <PanelGroup direction="vertical">
+              {/* TOP PANEL FOR Code Editor */}
+              <Panel defaultSize={70} minSize={30}>
+                <CodeEditorPanel
+                  selectedLanguage={selectedLanguage}
+                  code={code}
+                  isRunning={isRunning}
+                  onLanguageChange={handleLanguageChange}
+                  onCodeChange={setCode}
+                  onRunCode={handleRunCode}
+                />
+              </Panel>
 
-                {/* RIGHT PANEL for CODE EDITOR and OUTPUT */}
-                <Panel defaultSize={60} minSize={30}>
-                    <PanelGroup direction="vertical">
+              <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
 
-                        {/* TOP PANEL FOR Code Editor */}
-                        <Panel defaultSize={70} minSize={30}>
-                            <CodeEditorPanel />
-                        </Panel>
-
-                        <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
-
-                        {/* BOTTOM PANEL FOR Output */}
-                        <Panel defaultSize={30} minSize={30}>
-                            <OutputPanel />
-                        </Panel>
-
-                    </PanelGroup>
-                </Panel>
-
+              {/* BOTTOM PANEL FOR Output */}
+              <Panel defaultSize={30} minSize={30}>
+                <OutputPanel />
+              </Panel>
             </PanelGroup>
-        </div>
+          </Panel>
+        </PanelGroup>
+      </div>
     </div>
-  )
+  );
 }
 
-export default ProblemPage
+export default ProblemPage;
