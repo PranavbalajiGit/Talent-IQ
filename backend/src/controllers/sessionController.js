@@ -51,6 +51,7 @@ export async function getActiveSessions( _ , res) {
       "host",
       "name profileImage email clerkId",
     )
+    .populate("participant", "name profileImage email clerkId")
     .sort({ createdAt: -1 })
     .limit(20);
 

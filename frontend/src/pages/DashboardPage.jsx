@@ -41,6 +41,12 @@ function DashboardPage() {
   const activeSessions = activeSessionsData?.sessions || [];
   const recentSessions = recentSessionsData?.sessions || [];
 
+  const isUserInSession = (session) => {
+    if (!user.id) return false;
+
+    return session.host?.clerkId === user.id || session.participant?.clerkId === user.id;
+  };
+
   return (
     <>
       <div className="min-h-screen bg-base-300">
@@ -53,9 +59,12 @@ function DashboardPage() {
                 activeSessionsCount={activeSessions.length}
                 recentSessionsCount={recentSessions.length}
               />
-              
+
               <ActiveSessions
-                />
+                sessions={activeSessions}
+                isLoading={loadingActiveSessions}
+                isUserInSession={isUserInSession}
+              />
             </div>
 
             <RecentSessions />
