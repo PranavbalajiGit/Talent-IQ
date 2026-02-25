@@ -1,7 +1,10 @@
 import { useNavigate } from "react-router";
 import { useUser } from "@clerk/clerk-react";
 import { useState } from "react";
-import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSessions";
+import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hooks/useSessions.js";
+
+import Navbar from "../components/Navbar.jsx";
+import WelcomeSection from "../components/WelcomeSection.jsx";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -35,8 +38,9 @@ function DashboardPage() {
   const recentSessions = recentSessionsData?.sessions || [];
 
   return (
-    <div>
-      
+    <div className="min-h-screen bg-base-300">
+        <Navbar />
+        <WelcomeSection onCreateSession={() => setShowCreateModal(true)} />
     </div>
   )
 }
