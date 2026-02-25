@@ -5,6 +5,10 @@ import { useActiveSessions, useCreateSession, useMyRecentSessions } from "../hoo
 
 import Navbar from "../components/Navbar.jsx";
 import WelcomeSection from "../components/WelcomeSection.jsx";
+import StatsCards from "../components/StatsCards.jsx";
+import ActiveSessions from "../components/ActiveSessions.jsx";
+import RecentSessions from "../components/RecentSessions.jsx";
+import CreateSessionModal from "../components/CreateSessionModal.jsx";
 
 function DashboardPage() {
   const navigate = useNavigate();
@@ -38,10 +42,28 @@ function DashboardPage() {
   const recentSessions = recentSessionsData?.sessions || [];
 
   return (
-    <div className="min-h-screen bg-base-300">
-        <Navbar />
-        <WelcomeSection onCreateSession={() => setShowCreateModal(true)} />
-    </div>
+    <>
+      <div className="min-h-screen bg-base-300">
+          <Navbar />
+          <WelcomeSection onCreateSession={() => setShowCreateModal(true)} />
+
+          <div className="container mx-auto px-6 pb-16">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+              <StatsCards
+                />
+              <ActiveSessions
+                />
+            </div>
+
+            <RecentSessions />
+          </div>
+      </div>
+
+      <CreateSessionModal
+      />
+    </>
+
+
   )
 }
 
