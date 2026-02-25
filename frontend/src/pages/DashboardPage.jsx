@@ -67,7 +67,7 @@ function DashboardPage() {
               />
             </div>
 
-            <RecentSessions />
+            <RecentSessions sessions={recentSessions} isLoading={loadingRecentSessions} />
           </div>
       </div>
 
