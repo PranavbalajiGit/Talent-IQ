@@ -9,6 +9,7 @@ import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import { getDifficultyBadgeClass } from "../lib/utils.js";
 import { PROBLEMS } from "../data/problems.js";
 import OutputPanel from "../components/OutputPanel.jsx";
+import useStreamClient from "../hooks/useStreamClient.js";
 
 function SessionPage() {
 
@@ -26,6 +27,13 @@ function SessionPage() {
   const session = sessionData?.session;
   const isHost = session?.host?.clerkId === user?.id;
   const isParticipant = session?.participant?.clerkId === user?.id;
+
+  const { call, channel, chatClient, isInitializingCall, streamClient } = useStreamClient(
+    session,
+    loadingSession,
+    isHost,
+    isParticipant
+  );
 
   // find the problem data based on session problem title
   const problemData = session?.problem
