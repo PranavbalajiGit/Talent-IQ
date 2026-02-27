@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { StreamChat } from "stream-chat";
 import toast from "react-hot-toast";
 import { initializeStreamClient, disconnectStreamClient } from "../lib/stream.js";
-import { sessionApi } from "../api/sessions.js";
+import { sessionapi } from "../api/sessions.js";
 
 function useStreamClient(session, loadingSession, isHost, isParticipant) {
   const [streamClient, setStreamClient] = useState(null);
@@ -21,7 +21,7 @@ function useStreamClient(session, loadingSession, isHost, isParticipant) {
       if (session.status === "completed") return;
 
       try {
-        const { token, userId, userName, userImage } = await sessionApi.getStreamToken();
+        const { token, userId, userName, userImage } = await sessionapi.getStreamToken();
 
         const client = await initializeStreamClient(
           {
