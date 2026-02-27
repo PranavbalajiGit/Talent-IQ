@@ -5,9 +5,10 @@ import { useEndSession, useJoinSession, useSessionById } from "../hooks/useSessi
 import executeCode from "../lib/piston.js";
 import Navbar from "../components/Navbar.jsx";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
-import { Loader2Icon, LogOutIcon } from "lucide-react";
+import { Loader2Icon, LogOutIcon, PhoneOffIcon } from "lucide-react";
 import { getDifficultyBadgeClass } from "../lib/utils.js";
 import { PROBLEMS } from "../data/problems.js";
+import OutputPanel from "../components/OutputPanel.jsx";
 
 function SessionPage() {
 
@@ -225,14 +226,37 @@ function SessionPage() {
                             </div>
                         </Panel>
 
-                    </PanelGroup>
-                </Panel>
+                        <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize"/>
+
+                        <Panel defaultSize={50} minSize={20}>
+                            <PanelGroup direction="vertical">
+                                <Panel defaultSize={70} minSize={30}>
+                                    <CodeEditorPanel
+                                        selectedLanguage={selectedLanguage}
+                                        code={code}
+                                        isRunning={isRunning}
+                                        onLanguageChange={handleLanguageChange}
+                                        onCodeChange={(value) => setCode(value)}
+                                        onRunCode={handleRunCode}
+                                    />
+                                </Panel>
+
+                                <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize" />
+
+                                <Panel defaultSize={30} minSize={15}>
+                                    <OutputPanel output={output} />
+                                        </Panel>
+                                    </PanelGroup>
+                                </Panel>
+
+                            </PanelGroup>
+                        </Panel>
 
                 <PanelResizeHandle className="h-2 bg-base-300 hover:bg-primary transition-colors cursor-row-resize"/>
 
                 {/* RIGHT PANEL VIDEO CALLS AND CHATS */}
                 <Panel defaultSize={50} minSize={30}>
-    
+                    VIDEO CALLS AND CHATS COMING SOON
                 </Panel>
             </PanelGroup>
         </div>
